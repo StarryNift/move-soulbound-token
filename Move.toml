@@ -1,0 +1,17 @@
+[package]
+name = "move_soulbound_token"
+version = "0.0.0"
+#published-at = ""
+
+[dependencies]
+# mainnet
+#Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "ae1212baf8f0837e25926d941db3d26a61c1bea2" }
+#NftProtocol = { git = "https://github.com/Origin-Byte/nft-protocol.git", subdir = "contracts/nft_protocol", rev = "develop" }
+
+# testnet
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "09b2081498366df936abae26eea4b2d5cafb2788" }
+NftProtocol = { git = "https://github.com/Origin-Byte/nft-protocol.git", subdir = "contracts/nft_protocol", rev = "to-merge-to-main" }
+
+[addresses]
+move_soulbound_token = "0x0"
+sui = "0000000000000000000000000000000000000000000000000000000000000002"
