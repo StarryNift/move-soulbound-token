@@ -61,8 +61,8 @@ module move_soulbound_token::nft_config {
         nft_config.attributes.campaign_name
     }
 
-    /// Create space NFT config
-    public entry fun create_space_nft_config(
+    /// Create NFT config
+    public entry fun create_nft_config(
         contract: &Contract,
         name: String,
         description: String,

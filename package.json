@@ -1,0 +1,24 @@
+{
+  "name": "move_soulbound_token",
+  "version": "0.0.1",
+  "license": "MIT",
+  "scripts": {
+    "publish": "sui client publish --gas-budget 200000000",
+    "setup": "ts-node scripts/setup.ts",
+    "upgrade": "sui client upgrade --gas-budget 100000000 --upgrade-capability 0xfa4892f572ed3f244fa99ee1f4e3d894c8581a48b298e0ec35150aff4262de83",
+    "test": "ts-node scripts/test.ts"
+  },
+  "dependencies": {
+    "@mysten/bcs": "^0.7.1",
+    "@mysten/sui.js": "^0.33.0",
+    "dotenv": "^16.0.2",
+    "node-fetch": "^3.3.1",
+    "ts-node": "^10.9.1"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.11.7",
+    "mocha": "^10.2.0",
+    "typescript": "^4.8.3"
+  }
+}

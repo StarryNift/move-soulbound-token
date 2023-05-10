@@ -89,16 +89,16 @@ module move_soulbound_token::nft {
             ),
         );
 
-        transfer::public_transfer(mint_cap, sender);
+        transfer::public_share_object(mint_cap);
         transfer::public_transfer(publisher, sender);
         transfer::public_share_object(collection);
     }
 
     public entry fun mint_for_users(
         contract: &Contract,
-        receivers: vector<address>,
         nft_config: &NFTConfig,
         mint_cap: &mut MintCap<SBT>,
+        receivers: vector<address>,
         ctx: &mut TxContext
     ) {
         assert_admin(contract, ctx);
@@ -143,6 +143,8 @@ module move_soulbound_token::nft {
             mint_cap::increment_supply(mint_cap, 1);
 
             transfer::transfer(sbt, receiver);
+
+            i = i + 1;
         }
     }
 
