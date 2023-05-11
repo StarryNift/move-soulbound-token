@@ -173,13 +173,16 @@ module move_soulbound_token::nft {
 
         // attribute keys
         let attributes_keys = vector::empty<ascii::String>();
+        vector::push_back(&mut attributes_keys, ascii::string(b"reward_index"));
         vector::push_back(&mut attributes_keys, ascii::string(b"campaign_id"));
         vector::push_back(&mut attributes_keys, ascii::string(b"campaign_name"));
 
         // attribute values
         let attribute_values = vector::empty<ascii::String>();
+        let reward_index = get_nft_reward_index(nft_config);
         let campaign_id = get_nft_campaign_id(nft_config);
         let campaign_name = get_nft_campaign_name(nft_config);
+        vector::push_back(&mut attribute_values, to_ascii(reward_index));
         vector::push_back(&mut attribute_values, to_ascii(campaign_id));
         vector::push_back(&mut attribute_values, to_ascii(campaign_name));
 
