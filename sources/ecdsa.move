@@ -7,11 +7,6 @@ module move_soulbound_token::ecdsa {
 
     const EINVAILID_MINT_SIGNATURE: u64 = 0;
 
-
-    fun ed25519_verify(signature: &vector<u8>, public_key: &vector<u8>, msg: &vector<u8>): bool {
-        ed25519::ed25519_verify(signature, public_key, msg)
-    }
-
     fun verify_mint_data(
         buyer: address,
         nonce: u64,
