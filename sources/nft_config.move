@@ -7,6 +7,12 @@ module move_soulbound_token::nft_config {
     use sui::transfer;
     use sui::tx_context::TxContext;
     use sui::url::{Self, Url};
+    use std::vector;
+
+    // =================== Error =================
+
+    const EWrongAddressExisted: u64 = 0;
+    const EWrongMaxSupply: u64 = 1;
 
     // =================== Struct =================
 
@@ -23,7 +29,9 @@ module move_soulbound_token::nft_config {
         name: String,
         description: String,
         img_url: Url,
+        max_supply: u64,
         attributes: Attributes,
+        creators: vector<address>,
     }
 
     // =================== Event =================
@@ -66,6 +74,18 @@ module move_soulbound_token::nft_config {
         nft_config.attributes.campaign_name
     }
 
+    public fun add_creator(nft_config: &mut NFTConfig, user: address) {
+        let is_exists = vector::contains(&nft_config.creators, &user);
+        assert!(!is_exists, EWrongAddressExisted);
+
+        if (nft_config.max_supply > 0) {
+            let creator_len = vector::length(&nft_config.creators);
+            assert!(nft_config.max_supply > creator_len, EWrongMaxSupply);
+        };
+
+        vector::push_back(&mut nft_config.creators, user);
+    }
+
     /// Create NFT config
     public entry fun create_nft_config(
         contract: &Contract,
@@ -75,6 +95,7 @@ module move_soulbound_token::nft_config {
         reward_index: String,
         campaign_id: String,
         campaign_name: String,
+        max_supply: u64,
         ctx: &mut TxContext,
     ) {
         assert_admin(contract, ctx);
@@ -99,11 +120,13 @@ module move_soulbound_token::nft_config {
             name,
             description,
             img_url,
+            max_supply,
             attributes: Attributes {
                 reward_index,
                 campaign_id,
                 campaign_name,
             },
+            creators: vector::empty(),
         };
 
         transfer::share_object(nft_config);

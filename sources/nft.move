@@ -15,7 +15,7 @@ module move_soulbound_token::nft {
 
     use move_soulbound_token::admin::{Contract, assert_admin, assert_not_freeze, get_signer_public_key};
     use move_soulbound_token::ecdsa::assert_mint_signature_valid;
-    use move_soulbound_token::nft_config::{NFTConfig, get_nft_img_url, get_nft_name, get_nft_description, get_nft_campaign_id, get_nft_campaign_name, get_nft_id, get_nft_reward_index};
+    use move_soulbound_token::nft_config::{NFTConfig, get_nft_img_url, get_nft_name, get_nft_description, get_nft_campaign_id, get_nft_campaign_name, get_nft_id, get_nft_reward_index, add_creator};
     use sui::display;
     use sui::event;
     use sui::object::{Self, UID, ID};
@@ -96,7 +96,7 @@ module move_soulbound_token::nft {
 
     public entry fun mint_for_users(
         contract: &Contract,
-        nft_config: &NFTConfig,
+        nft_config: &mut NFTConfig,
         mint_cap: &mut MintCap<SBT>,
         receivers: vector<address>,
         ctx: &mut TxContext
@@ -132,6 +132,8 @@ module move_soulbound_token::nft {
 
             let receiver = *vector::borrow(&receivers, i);
 
+            add_creator(nft_config, receiver);
+
             event::emit(MintNFTEvent {
                 creator: receiver,
                 nft_config_id: get_nft_id(nft_config),
@@ -153,7 +155,7 @@ module move_soulbound_token::nft {
 
     public entry fun claim(
         contract: &Contract,
-        nft_config: &NFTConfig,
+        nft_config: &mut NFTConfig,
         mint_cap: &mut MintCap<SBT>,
         signature: vector<u8>,
         ctx: &mut TxContext
@@ -190,6 +192,8 @@ module move_soulbound_token::nft {
         };
 
         let receiver = tx_context::sender(ctx);
+
+        add_creator(nft_config, receiver);
 
         event::emit(MintNFTEvent {
             creator: receiver,

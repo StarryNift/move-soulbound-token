@@ -73,6 +73,8 @@ async function create_nft_config() {
                 tx.pure("campaign_id string test", "string"),
                 // campaign_name
                 tx.pure("campaign_name string test", "string"),
+                // max supply
+                tx.pure(2, 'u64')
             ],
         });
 

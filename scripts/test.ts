@@ -110,7 +110,8 @@ async function test_claim() {
 }
 
 async function main() {
-    await test_claim()
+    await test_mint_for_users()
+    // await test_claim()
 }
 
 main()
