@@ -3,8 +3,7 @@ module move_soulbound_token::ecdsa {
 
     use sui::address;
     use sui::ed25519;
-    use sui::object::ID;
-    use sui::object;
+    use sui::object::{Self, ID};
 
     const EINVAILID_MINT_SIGNATURE: u64 = 0;
 
