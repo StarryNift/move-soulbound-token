@@ -29,14 +29,13 @@ const mintCap = process.env.MINT_CAP || "";
 
 async function get_sign_data() {
     const address = await signer.getAddress();
-    console.log('getAddress: ', address);
-    const data = [
+    const rawData = Buffer.concat([
         // user address
         bcs.ser(BCS.ADDRESS, address).toBytes(),
         // nft config id
         bcs.ser(BCS.ADDRESS, nftConfigId).toBytes(),
-    ];
-    return signer.signData(bcs.ser(['vector', BCS.U8], data).toBytes())
+    ]);
+    return Buffer.from(await keypair_ed25519.signData(rawData)).toString('hex');
 }
 
 async function test_mint_for_users() {
@@ -73,7 +72,7 @@ async function test_mint_for_users() {
 
 async function test_claim() {
     try {
-        // const signature = '8341d4775e92d78866a54a71855c8b7233d19b764e8b57300e60bbcd58399b650b06e3b986dc95b2154e11aad0e3b91df4383a635b9eea6d7e56065cf564bc03';
+        // const signature = 'b1b5ca67acf32dcdd9d219a71a222dca5930ab7a45ff96bb641f19ad354c3b304d690bb56da18c65be7adc5ba8ae6f05ca8743cd7c6707d68ad39e7a9f121700';
         const signature = await get_sign_data();
         console.log('signature: ', signature);
         const sign = bcs.ser(['vector', BCS.U8],
@@ -110,8 +109,8 @@ async function test_claim() {
 }
 
 async function main() {
-    await test_mint_for_users()
-    // await test_claim()
+    // await test_mint_for_users()
+    await test_claim()
 }
 
 main()
