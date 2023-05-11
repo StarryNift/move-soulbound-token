@@ -12,6 +12,7 @@ module move_soulbound_token::nft_config {
 
     /// NFT attributes
     struct Attributes has copy, store, drop {
+        reward_index: String,
         campaign_id: String,
         campaign_name: String,
     }
@@ -53,6 +54,10 @@ module move_soulbound_token::nft_config {
         nft_config.img_url
     }
 
+    public fun get_nft_reward_index(nft_config: &NFTConfig): String {
+        nft_config.attributes.reward_index
+    }
+
     public fun get_nft_campaign_id(nft_config: &NFTConfig): String {
         nft_config.attributes.campaign_id
     }
@@ -67,6 +72,7 @@ module move_soulbound_token::nft_config {
         name: String,
         description: String,
         img_url: String,
+        reward_index: String,
         campaign_id: String,
         campaign_name: String,
         ctx: &mut TxContext,
@@ -82,6 +88,7 @@ module move_soulbound_token::nft_config {
             description,
             img_url,
             attributes: Attributes {
+                reward_index,
                 campaign_id,
                 campaign_name,
             },
@@ -93,6 +100,7 @@ module move_soulbound_token::nft_config {
             description,
             img_url,
             attributes: Attributes {
+                reward_index,
                 campaign_id,
                 campaign_name,
             },

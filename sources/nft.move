@@ -15,7 +15,7 @@ module move_soulbound_token::nft {
 
     use move_soulbound_token::admin::{Contract, assert_admin, assert_not_freeze, get_signer_public_key};
     use move_soulbound_token::ecdsa::assert_mint_signature_valid;
-    use move_soulbound_token::nft_config::{NFTConfig, get_nft_img_url, get_nft_name, get_nft_description, get_nft_campaign_id, get_nft_campaign_name, get_nft_id};
+    use move_soulbound_token::nft_config::{NFTConfig, get_nft_img_url, get_nft_name, get_nft_description, get_nft_campaign_id, get_nft_campaign_name, get_nft_id, get_nft_reward_index};
     use sui::display;
     use sui::event;
     use sui::object::{Self, UID, ID};
@@ -24,7 +24,7 @@ module move_soulbound_token::nft {
     use sui::url::Url;
 
     const COLLECTION_NAME: vector<u8> = b"Trantor soulbound token";
-    const COLLECTION_DESCRIPTION: vector<u8> = b"";
+    const COLLECTION_DESCRIPTION: vector<u8> = b"This collection contains all SBT issued by Trantor on Sui mainnet which are provided exclusively for the campaign participators on Trantor platform. Find out more details from Trantor Official Website: https://trantor.xyz";
 
     // =================== Struct =================
 
@@ -105,13 +105,16 @@ module move_soulbound_token::nft {
 
         // attribute keys
         let attributes_keys = vector::empty<ascii::String>();
+        vector::push_back(&mut attributes_keys, ascii::string(b"reward_index"));
         vector::push_back(&mut attributes_keys, ascii::string(b"campaign_id"));
         vector::push_back(&mut attributes_keys, ascii::string(b"campaign_name"));
 
         // attribute values
         let attribute_values = vector::empty<ascii::String>();
+        let reward_index = get_nft_reward_index(nft_config);
         let campaign_id = get_nft_campaign_id(nft_config);
         let campaign_name = get_nft_campaign_name(nft_config);
+        vector::push_back(&mut attribute_values, to_ascii(reward_index));
         vector::push_back(&mut attribute_values, to_ascii(campaign_id));
         vector::push_back(&mut attribute_values, to_ascii(campaign_name));
 
@@ -152,7 +155,6 @@ module move_soulbound_token::nft {
         contract: &Contract,
         nft_config: &NFTConfig,
         mint_cap: &mut MintCap<SBT>,
-        nonce: u64,
         signature: vector<u8>,
         ctx: &mut TxContext
     ) {
@@ -162,7 +164,7 @@ module move_soulbound_token::nft {
 
         assert_mint_signature_valid(
             sender,
-            nonce,
+            &get_nft_id(nft_config),
             signature,
             get_signer_public_key(contract)
         );
